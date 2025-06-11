@@ -1,18 +1,31 @@
-name: Python Environment Setup
+name: Python CI – Environment Setup & Install Dependencies
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-jobs:   
-    setup-python:
-        runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-            - name: Set up Python
-              uses: actions/setup-python@v4
-              with:
-                python-version: '3.10'
-            - name: Verify python version
-              run: python --version
+jobs:
+  setup-and-install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Verify Python version
+        run: python --version
+
+      - name: Upgrade pip and install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: List installed packages
+        run: pip list
